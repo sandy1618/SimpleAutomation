@@ -21,6 +21,10 @@ fi
 echo "Cloning SimpleAutomation repository into $REPO_DIR..."
 git clone https://github.com/sandy1618/SimpleAutomation.git $REPO_DIR/SimpleAutomation
 
+# Make all .sh files in the SimpleAutomation repository executable
+echo "Making all .sh files in $REPO_DIR/SimpleAutomation executable..."
+find $REPO_DIR/SimpleAutomation -type f -name "*.sh" -exec chmod +x {} \;
+
 # Clean up
 echo "Cleaning up..."
 sudo apt autoremove -y
