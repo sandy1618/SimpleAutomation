@@ -78,7 +78,7 @@ echo "Copying VS Code settings and keybindings..."
 mkdir -p ~/.config/Code/User/
 cp $REPO_DIR/vscode_backup/settings.json ~/.config/Code/User/settings.json
 cp $REPO_DIR/vscode_backup/keybindings.json ~/.config/Code/User/keybindings.json
-cat $REPO_DIR/vscode_backup/extensions.txt | xargs -L 1 code --install-extension
+cat $REPO_DIR/vscode_backup/extension.txt | xargs -L 1 code --install-extension
 
 # Install Brave Browser with fallback and add to Dock
 install_with_fallback "Brave Browser" "brave" install_brave_apt "brave-browser"
