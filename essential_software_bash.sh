@@ -72,7 +72,7 @@ install_chrome_deb() {
 # Install VS Code with fallback and add to Dock
 install_with_fallback "VS Code" "code --classic" install_vscode_apt "code"
 
-REPO_DIR=~/Documents/Repository
+REPO_DIR=~/Documents/Repository/SimpleAutomation
 # Copy VS Code settings and keybindings
 echo "Copying VS Code settings and keybindings..."
 mkdir -p ~/.config/Code/User/
