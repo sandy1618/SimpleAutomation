@@ -21,6 +21,7 @@ install_with_fallback() {
     local app_name=$1
     local snap_name=$2
     local fallback_function=$3
+    local desktop_file_name=$4
 
     echo "Attempting to install $app_name via Snap..."
     if sudo snap install $snap_name; then
@@ -28,6 +29,17 @@ install_with_fallback() {
     else
         echo "Failed to install $app_name via Snap. Falling back to another method..."
         $fallback_function
+    fi
+
+    # Add the application to the GNOME Dock favorites
+    if [ -n "$desktop_file_name" ]; then
+        gnome_favorites=$(gsettings get org.gnome.shell favorite-apps)
+        if [[ $gnome_favorites != *"$desktop_file_name"* ]]; then
+            echo "Adding $app_name to the GNOME Dock favorites..."
+            gsettings set org.gnome.shell favorite-apps "$(echo $gnome_favorites | sed "s/]$/, '$desktop_file_name.desktop']/")"
+        else
+            echo "$app_name is already in the GNOME Dock favorites."
+        fi
     fi
 }
 
@@ -57,14 +69,14 @@ install_chrome_deb() {
     rm google-chrome-stable_current_amd64.deb
 }
 
-# Install VS Code with fallback
-install_with_fallback "VS Code" "code --classic" install_vscode_apt
+# Install VS Code with fallback and add to Dock
+install_with_fallback "VS Code" "code --classic" install_vscode_apt "code"
 
-# Install Brave Browser with fallback
-install_with_fallback "Brave Browser" "brave" install_brave_apt
+# Install Brave Browser with fallback and add to Dock
+install_with_fallback "Brave Browser" "brave" install_brave_apt "brave-browser"
 
-# Install Google Chrome Browser (Snap alternative doesn't exist, so using .deb directly)
-install_with_fallback "Google Chrome Browser" "" install_chrome_deb
+# Install Google Chrome Browser (Snap alternative doesn't exist, so using .deb directly) and add to Dock
+install_with_fallback "Google Chrome Browser" "" install_chrome_deb "google-chrome"
 
 # Install Cursor Editor through Snap (no fallback needed as there's no alternative installation method)
 echo "Installing Cursor Editor..."
