@@ -72,11 +72,25 @@ install_chrome_deb() {
 # Install VS Code with fallback and add to Dock
 install_with_fallback "VS Code" "code --classic" install_vscode_apt "code"
 
+REPO_DIR=~/Documents/Repository
+# Copy VS Code settings and keybindings
+echo "Copying VS Code settings and keybindings..."
+mkdir -p ~/.config/Code/User/
+cp $REPO_DIR/vscode_backup/settings.json ~/.config/Code/User/settings.json
+cp $REPO_DIR/vscode_backup/keybindings.json ~/.config/Code/User/keybindings.json
+
+
 # Install Brave Browser with fallback and add to Dock
 install_with_fallback "Brave Browser" "brave" install_brave_apt "brave-browser"
 
-# Install Google Chrome Browser (Snap alternative doesn't exist, so using .deb directly) and add to Dock
-install_with_fallback "Google Chrome Browser" "" install_chrome_deb "google-chrome"
+# Check if Google Chrome is installed, if not, install it and add to Dock
+if ! command -v google-chrome &> /dev/null; then
+    echo "Google Chrome is not installed. Installing..."
+    install_with_fallback "Google Chrome Browser" "" install_chrome_deb "google-chrome"
+else
+    echo "Google Chrome is already installed."
+fi
+
 
 # Install Cursor Editor through Snap (no fallback needed as there's no alternative installation method)
 echo "Installing Cursor Editor..."
