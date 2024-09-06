@@ -69,6 +69,14 @@ install_chrome_deb() {
     rm google-chrome-stable_current_amd64.deb
 }
 
+# Fallback function to install Slack via .deb package
+install_slack_deb() {
+    wget https://downloads.slack-edge.com/releases/linux/4.29.149/prod/x64/slack-desktop-4.29.149-amd64.deb
+    sudo apt install ./slack-desktop-*.deb -y
+    rm slack-desktop-*.deb
+}
+
+
 # Install VS Code with fallback and add to Dock
 install_with_fallback "VS Code" "code --classic" install_vscode_apt "code"
 
@@ -89,6 +97,14 @@ if ! command -v google-chrome &> /dev/null; then
     install_with_fallback "Google Chrome Browser" "" install_chrome_deb "google-chrome"
 else
     echo "Google Chrome is already installed."
+fi
+
+# Install Slack with fallback and add to Dock
+if ! command -v slack &> /dev/null; then
+    echo "Slack is not installed. Installing..."
+    install_with_fallback "Slack" "slack" install_slack_deb "slack"
+else
+    echo "Slack is already installed."
 fi
 
 
